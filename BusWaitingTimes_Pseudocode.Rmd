@@ -1,0 +1,63 @@
+---
+title: "BusWaitingTimes"
+author: "Paul M"
+date: "1/23/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.  
+
+***
+
+If you know Latex, you can use it within an Rmarkdown document. For example, to create some vertical space:
+\vspace*{1in}   
+
+**Bus Waiting Time Problem**
+
+This document is going to give pseudocode for the first part of the Bus Waiting Times question of Week 2.
+We will start by defining some global variables. We are assuming that the waiting time between buses is exponentially distributed, with time measured in hours. We embed R code in the document as follows:
+```{r globals, include=TRUE}
+set.seed(597)
+NTrials<-100000
+TimeToSample<-10    # the fixed time at which we will arrive at the bus-stop each day
+ExpRate<-1
+WaitingTimes<-mat.or.vec(1,NTrials)
+Exponentials<-mat.or.vec(1,NTrials)
+TimeBetweenBuses<-mat.or.vec(1,NTrials)
+```
+You will notice that Rmarkdown is not great at wrapping long lines of Rcode.
+
+Now repeat the simulation NTrials times
+```{r}
+for (i in 1:NTrials){
+  # Start  the clock at 0
+	TotalTime<-0
+  # simulate the sequence of bus arrivals 
+  # until we get to the time at which we arrive at the bus stop
+	while (TotalTime<TimeToSample){
+		 # generate the time to the next bus (call it NewExp) - you have to write this
+		TotalTime<-TotalTime+NewExp  # add that time to the clock
+	}
+  # how long do I have to wait for the next bus?  (question 1)
+	WaitingTimes[i]<-TotalTime-TimeToSample
+  
+  # if I just got off the last bus, how long did I have to wait for the next one? (question2)
+	Exponentials[i]<- -1*log(runif(1))/ExpRate
+	TimeBetweenBuses[i]<-NewExp
+}
+
+# now make some plots to summarize the results
+MyBreaks<-seq(0,15,0.25)   # defines a series of values at which the histogram will start/end each 'bar'
+hist(WaitingTimes,breaks=MyBreaks)
+hist(TimeBetweenBuses,breaks=MyBreaks)
+```
+
+Comment on your results and then extend this code to answer parts 2, 3 and 4 of the exercise.
